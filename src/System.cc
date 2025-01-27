@@ -568,6 +568,14 @@ bool System::isShutDown() {
 
 vector<Eigen::Matrix4f> System::GetCameraTrajectory()
 {
+
+    // Check if system is ready
+    if (mpTracker->mState == Tracking::NOT_INITIALIZED || 
+        mpTracker->mState == Tracking::NO_IMAGES_YET)
+    {
+        return vector<Eigen::Matrix4f>();
+    }
+
     vector<KeyFrame*> vpKFs = mpAtlas->GetAllKeyFrames();
     sort(vpKFs.begin(),vpKFs.end(),KeyFrame::lId);
 
@@ -671,6 +679,7 @@ void System::SaveTrajectoryTUM(const string &filename)
     f.close();
     // cout << endl << "trajectory saved!" << endl;
 }
+
 
 void System::SaveKeyFrameTrajectoryTUM(const string &filename)
 {
